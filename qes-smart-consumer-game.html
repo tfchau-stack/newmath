@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Queen Elizabeth School - 精明消費王 (The Smart Consumer Game)</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons for Beautiful Visuals -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap');
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
+  <!-- Header Section with QES Theme (Teal/Emerald and Gold) -->
+  <header class="bg-emerald-800 text-white shadow-md border-b-4 border-amber-500">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="flex items-center gap-3">
+        <!-- QES Simulated Crest / Icon -->
+        <div class="bg-amber-500 text-emerald-900 w-12 h-12 rounded-full flex items-center justify-center font-bold text-2xl shadow-inner">
+          QE
+        </div>
+        <div>
+          <h1 class="text-xl md:text-2xl font-bold tracking-wide">伊利沙伯中學 Queen Elizabeth School</h1>
+          <p class="text-xs text-emerald-100 font-light">Secondary 2 Mathematics • 百分比應用：精明消費王</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 bg-emerald-900 bg-opacity-60 px-4 py-2 rounded-lg border border-emerald-700">
+        <i class="fa-solid fa-users text-amber-400 text-lg"></i>
+        <div id="team-badge" class="text-sm font-medium">
+          正在準備遊戲...
+        </div>
+      </div>
+    </div>
+  </header>
+  <!-- Main Game Workspace -->
+  <main class="max-w-6xl w-full mx-auto px-4 py-6 flex-grow">
+   
+    <!-- Team Name Setup Section (Initial State) -->
+    <div id="setup-section" class="bg-white rounded-2xl shadow-xl p-6 md:p-10 text-center max-w-xl mx-auto my-12 border border-slate-100 transition-all duration-300 transform">
+      <div class="inline-flex p-4 bg-emerald-50 text-emerald-700 rounded-full mb-4">
+        <i class="fa-solid fa-gamepad text-4xl"></i>
+      </div>
+      <h2 class="text-2xl font-bold text-emerald-900 mb-2">精明消費王挑戰賽</h2>
+      <p class="text-slate-500 text-sm mb-6">歡迎來到挑戰！請輸入你與組員的名稱以開始決策。</p>
+     
+      <div class="mb-6 text-left">
+        <label class="block text-sm font-semibold text-slate-700 mb-2">小組/學生名稱：</label>
+        <input type="text" id="team-name-input" placeholder="例如：第一組 (Chris & Sam)" class="w-full px-4 py-3 rounded-lg border-2 border-slate-200 focus:border-emerald-500 focus:ring-0 outline-none transition duration-150">
+      </div>
+      <button onclick="startGame()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition duration-150 transform active:scale-95">
+        開始挑戰 <i class="fa-solid fa-arrow-right ml-1"></i>
+      </button>
+    </div>
+    <!-- Active Game Layout (Hidden by default) -->
+    <div id="game-section" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-6">
+     
+      <!-- LEFT COLUMN: Part 1 - Rules & Catalog (Lg: 7 cols) -->
+      <section class="lg:col-span-7 space-y-6">
+       
+        <!-- Mission Info & Budget Panel -->
+        <div class="bg-gradient-to-r from-emerald-800 to-teal-800 text-white rounded-2xl p-6 shadow-lg">
+          <div class="flex justify-between items-start">
+            <div>
+              <span class="bg-amber-500 text-emerald-950 text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">Mission Profile</span>
+              <h3 class="text-xl font-bold mt-2">任務目標：採購三件必買商品各一件</h3>
+              <p class="text-emerald-100 text-sm mt-1">運用百分比運算策略，在三間商店中取得最佳優惠，爭取保留最多的剩餘資金！</p>
+            </div>
+            <div class="text-right">
+              <span class="text-xs text-emerald-200">初始預算</span>
+              <div class="text-3xl font-extrabold text-amber-400 mt-1">$1,000</div>
+            </div>
+          </div>
+          <!-- Framework Quick Tips -->
+          <div class="mt-4 pt-4 border-t border-emerald-700/50 grid grid-cols-2 gap-4 text-xs">
+            <div class="flex gap-2 items-start bg-emerald-900 bg-opacity-30 p-2.5 rounded-lg">
+              <span class="bg-emerald-500 text-white w-5 h-5 rounded-full flex items-center justify-center font-bold shrink-0">R</span>
+              <div>
+                <strong class="text-amber-300">RTAC 運算框架：</strong>
+                <p class="text-emerald-100">仔細閱讀規則，畫出流程圖，再行運算，最後逆向驗算！</p>
+              </div>
+            </div>
+            <div class="flex gap-2 items-start bg-emerald-900 bg-opacity-30 p-2.5 rounded-lg">
+              <span class="bg-emerald-500 text-white w-5 h-5 rounded-full flex items-center justify-center font-bold shrink-0">3V</span>
+              <div>
+                <strong class="text-amber-300">3V 協作溝通：</strong>
+                <p class="text-emerald-100">保持眼神接觸 (Visual)、支持性點頭 (Vocal)、不打斷並重述對方想法 (Verbal)。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Part 1: Rules & Catalog Table -->
+        <div class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+          <div class="flex items-center gap-2 mb-4">
+            <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">1</div>
+            <h3 class="text-lg font-bold text-slate-800">第一部份：商品價格與商店規則</h3>
+          </div>
+         
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="border-b border-slate-100 text-slate-400 text-xs font-semibold uppercase">
+                  <th class="pb-3 pl-2">商品項目</th>
+                  <th class="pb-3 text-center bg-blue-50/50 text-blue-800 rounded-t-lg">X 商店<br><span class="text-[10px] font-normal text-blue-500">全場85折</span></th>
+                  <th class="pb-3 text-center bg-purple-50/50 text-purple-800 rounded-t-lg">Y 商店<br><span class="text-[10px] font-normal text-purple-500">買二件較平6折</span></th>
+                  <th class="pb-3 text-center bg-amber-50/50 text-amber-800 rounded-t-lg">Z 商店<br><span class="text-[10px] font-normal text-amber-500">階梯滿額折</span></th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 text-sm">
+                <tr>
+                  <td class="py-4 font-medium flex items-center gap-2">
+                    <span class="text-2xl">📱</span>
+                    <div>
+                      <div class="font-bold text-slate-800">電子平板</div>
+                      <span class="text-[10px] text-slate-400">Electronic Tablet</span>
+                    </div>
+                  </td>
+                  <td class="py-4 text-center font-bold text-blue-600 bg-blue-50/20">$600</td>
+                  <td class="py-4 text-center font-bold text-purple-600 bg-purple-50/20">$550</td>
+                  <td class="py-4 text-center font-bold text-amber-600 bg-amber-50/20">$620</td>
+                </tr>
+                <tr>
+                  <td class="py-4 font-medium flex items-center gap-2">
+                    <span class="text-2xl">🎧</span>
+                    <div>
+                      <div class="font-bold text-slate-800">無線耳機</div>
+                      <span class="text-[10px] text-slate-400">Wireless Headset</span>
+                    </div>
+                  </td>
+                  <td class="py-4 text-center font-bold text-blue-600 bg-blue-50/20">$200</td>
+                  <td class="py-4 text-center font-bold text-purple-600 bg-purple-50/20">$250</td>
+                  <td class="py-4 text-center font-bold text-amber-600 bg-amber-50/20">$220</td>
+                </tr>
+                <tr>
+                  <td class="py-4 font-medium flex items-center gap-2">
+                    <span class="text-2xl">⌚</span>
+                    <div>
+                      <div class="font-bold text-slate-800">智能手環</div>
+                      <span class="text-[10px] text-slate-400">Smart Wristband</span>
+                    </div>
+                  </td>
+                  <td class="py-4 text-center font-bold text-blue-600 bg-blue-50/20">$150</td>
+                  <td class="py-4 text-center font-bold text-purple-600 bg-purple-50/20">$120</td>
+                  <td class="py-4 text-center font-bold text-amber-600 bg-amber-50/20">$140</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- Fine Print Conditions -->
+          <div class="mt-5 space-y-2 bg-slate-50 p-4 rounded-xl text-xs text-slate-600 border border-slate-100">
+            <div class="font-semibold text-slate-800 mb-1 flex items-center gap-1">
+              <i class="fa-solid fa-circle-info text-emerald-600"></i> 各店詳細折扣優惠條例 (T&C)：
+            </div>
+            <p>🔵 <strong class="text-blue-700">Shop X</strong>：結帳時，全單所有商品一律享有 <span class="bg-blue-100 text-blue-800 font-bold px-1.5 py-0.5 rounded">15% Off</span>（即 85 折）。</p>
+            <p>🟣 <strong class="text-purple-700">Shop Y</strong>：實行組合零售配對政策。當你在該店同時購入多件產品，需將商品兩兩配對。配對中<span class="bg-purple-100 text-purple-800 font-bold px-1.5 py-0.5 rounded">價格較低的一件享 40% Off</span>（即 6 折）。未成對之第三件商品需按原價計算。</p>
+            <p>🟡 <strong class="text-amber-700">Shop Z</strong>：階梯優惠。在該店購買之總金額滿 <span class="font-bold">$500</span> 享有 <span class="bg-amber-100 text-amber-800 font-bold px-1.5 py-0.5 rounded">10% Off (9折)</span>；總金額若超過 <span class="font-bold">$800</span> 則享有 <span class="bg-amber-100 text-amber-800 font-bold px-1.5 py-0.5 rounded">25% Off (75折)</span>。</p>
+          </div>
+        </div>
+        <!-- Metacognitive Practice (Scratchpad for RTAC) -->
+        <div class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-calculator text-emerald-600"></i>
+              <h4 class="font-bold text-slate-800 text-sm">小組計算草稿區 (RTAC 實踐)</h4>
+            </div>
+            <span class="text-[10px] bg-emerald-50 text-emerald-700 font-medium px-2 py-0.5 rounded-full">此草稿不會影響最終提交結果</span>
+          </div>
+          <p class="text-xs text-slate-400 mb-3">利用以下百分比轉換快速提示進行心算或筆算草稿：</p>
+         
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4 text-xs">
+            <div class="bg-slate-50 p-2 rounded border border-slate-100 text-center">
+              <span class="text-slate-500 block">15% Off (85折)</span>
+              <strong class="text-slate-700">× 0.85</strong>
+            </div>
+            <div class="bg-slate-50 p-2 rounded border border-slate-100 text-center">
+              <span class="text-slate-500 block">10% Off (9折)</span>
+              <strong class="text-slate-700">× 0.90</strong>
+            </div>
+            <div class="bg-slate-50 p-2 rounded border border-slate-100 text-center">
+              <span class="text-slate-500 block">25% Off (75折)</span>
+              <strong class="text-slate-700">× 0.75</strong>
+            </div>
+            <div class="bg-slate-50 p-2 rounded border border-slate-100 text-center">
+              <span class="text-slate-500 block">40% Off (6折)</span>
+              <strong class="text-slate-700">× 0.60</strong>
+            </div>
+          </div>
+          <textarea id="scratchpad" rows="3" placeholder="在這裡記錄你分析的步驟：
+例如：若平板耳機選Z店，總額 620+220=840 (過800)，折扣：840 * 0.75 = ..." class="w-full text-sm p-3 border border-slate-200 rounded-xl bg-slate-50/50 focus:bg-white outline-none focus:ring-1 focus:ring-emerald-500 font-mono"></textarea>
+        </div>
+      </section>
+      <!-- RIGHT COLUMN: Part 2 - Shopping Decision & Checkout (Lg: 5 cols) -->
+      <section class="lg:col-span-5 space-y-6">
+       
+        <!-- Decision Panel -->
+        <div class="bg-white rounded-2xl shadow-md p-6 border border-slate-100 flex flex-col justify-between h-full">
+          <div>
+            <div class="flex items-center gap-2 mb-4">
+              <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">2</div>
+              <h3 class="text-lg font-bold text-slate-800">第二部份：分配購買商店</h3>
+            </div>
+           
+            <p class="text-xs text-slate-500 mb-6">請為以下三件指定商品各選擇一間購買商店。你的組別必須確保每種商品都買齊一件。</p>
+            <div class="space-y-5">
+              <!-- Item 1: Tablet -->
+              <div class="p-4 rounded-xl border border-slate-100 bg-slate-50 hover:bg-slate-100/50 transition duration-150">
+                <div class="flex justify-between items-center mb-3">
+                  <div class="flex items-center gap-2">
+                    <span class="text-2xl">📱</span>
+                    <div>
+                      <h4 class="font-bold text-slate-800 text-sm">電子平板</h4>
+                      <span id="tablet-price-indicator" class="text-xs text-slate-400">未選商店</span>
+                    </div>
+                  </div>
+                  <span id="tablet-status" class="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-rose-50 text-rose-600">🔴 未選擇</span>
+                </div>
+                <select id="select-tablet" onchange="updateDecision('tablet')" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-sm font-medium focus:ring-1 focus:ring-emerald-500 outline-none">
+                  <option value="">-- 請選擇一間商店 --</option>
+                  <option value="X">Shop X (原價 $600，享 15% Off)</option>
+                  <option value="Y">Shop Y (原價 $550，參與配對較平6折)</option>
+                  <option value="Z">Shop Z (原價 $620，參與階梯滿額折)</option>
+                </select>
+              </div>
+              <!-- Item 2: Headset -->
+              <div class="p-4 rounded-xl border border-slate-100 bg-slate-50 hover:bg-slate-100/50 transition duration-150">
+                <div class="flex justify-between items-center mb-3">
+                  <div class="flex items-center gap-2">
+                    <span class="text-2xl">🎧</span>
+                    <div>
+                      <h4 class="font-bold text-slate-800 text-sm">無線耳機</h4>
+                      <span id="headset-price-indicator" class="text-xs text-slate-400">未選商店</span>
+                    </div>
+                  </div>
+                  <span id="headset-status" class="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-rose-50 text-rose-600">🔴 未選擇</span>
+                </div>
+                <select id="select-headset" onchange="updateDecision('headset')" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-sm font-medium focus:ring-1 focus:ring-emerald-500 outline-none">
+                  <option value="">-- 請選擇一間商店 --</option>
+                  <option value="X">Shop X (原價 $200，享 15% Off)</option>
+                  <option value="Y">Shop Y (原價 $250，參與配對較平6折)</option>
+                  <option value="Z">Shop Z (原價 $220，參與階梯滿額折)</option>
+                </select>
+              </div>
+              <!-- Item 3: Wristband -->
+              <div class="p-4 rounded-xl border border-slate-100 bg-slate-50 hover:bg-slate-100/50 transition duration-150">
+                <div class="flex justify-between items-center mb-3">
+                  <div class="flex items-center gap-2">
+                    <span class="text-2xl">⌚</span>
+                    <div>
+                      <h4 class="font-bold text-slate-800 text-sm">智能手環</h4>
+                      <span id="wristband-price-indicator" class="text-xs text-slate-400">未選商店</span>
+                    </div>
+                  </div>
+                  <span id="wristband-status" class="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-rose-50 text-rose-600">🔴 未選擇</span>
+                </div>
+                <select id="select-wristband" onchange="updateDecision('wristband')" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-sm font-medium focus:ring-1 focus:ring-emerald-500 outline-none">
+                  <option value="">-- 請選擇一間商店 --</option>
+                  <option value="X">Shop X (原價 $150，享 15% Off)</option>
+                  <option value="Y">Shop Y (原價 $120，參與配對較平6折)</option>
+                  <option value="Z">Shop Z (原價 $140，參與階梯滿額折)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <!-- Live Submission Warning & Guarded Checkout Button -->
+          <div class="mt-8 pt-6 border-t border-slate-100">
+            <div class="bg-amber-50 rounded-xl p-4 border border-amber-200 text-xs text-amber-800 mb-4 flex gap-3">
+              <i class="fa-solid fa-triangle-exclamation text-base text-amber-600 shrink-0 mt-0.5"></i>
+              <div>
+                <strong class="block mb-0.5 font-bold">⚠️ 重要提示：</strong>
+                一旦按下結帳，系統便會即時鎖定並計算最終花費，你們<strong class="underline">不能返回</strong>，並且全班只有這<strong class="underline">一次</strong>提交機會！請確保與組員完成 3V 討論及 RTAC 四步驗算。
+              </div>
+            </div>
+            <button id="checkout-btn" disabled onclick="confirmCheckout()" class="w-full bg-slate-300 text-slate-500 font-bold py-4 px-6 rounded-xl cursor-not-allowed transition duration-200 flex items-center justify-center gap-2">
+              <i class="fa-solid fa-lock"></i> 請先分配所有商品
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+    <!-- Part 3: Result Dashboard (Hidden by default, displayed on submission) -->
+    <div id="result-section" class="hidden max-w-4xl mx-auto space-y-6">
+     
+      <!-- Primary Score Showcase Card -->
+      <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-100">
+       
+        <!-- Header banner based on performance -->
+        <div id="result-header-banner" class="p-8 text-center text-white relative">
+          <!-- Sparkles/Confetti simulated background elements -->
+          <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_20%,transparent_20%)] bg-[size:16px_16px]"></div>
+          <div id="result-icon-container" class="inline-flex p-4 bg-white/20 rounded-full mb-3 text-4xl">
+            <i class="fa-solid fa-trophy"></i>
+          </div>
+          <h2 id="result-title" class="text-3xl font-extrabold tracking-wide">結算結果</h2>
+          <p id="result-subtitle" class="text-sm mt-1 text-emerald-100">恭喜完成採購決策！</p>
+        </div>
+        <div class="p-6 md:p-8 grid grid-cols-1 md:grid-cols-12 gap-8">
+         
+          <!-- Receipt/Calculator Breakdown Column (Md: 5 cols) -->
+          <div class="md:col-span-5 bg-slate-50 rounded-2xl p-5 border border-slate-100/80 flex flex-col justify-between">
+            <div>
+              <h4 class="font-bold text-slate-800 text-sm pb-3 border-b border-slate-200/60 mb-4 flex justify-between">
+                <span>🧾 採購結帳收據</span>
+                <span id="receipt-team-name" class="text-xs font-normal text-slate-500">第一組</span>
+              </h4>
+             
+              <!-- Selected paths visual summary -->
+              <div id="receipt-items" class="space-y-4 text-sm">
+                <!-- Dynamically filled -->
+              </div>
+            </div>
+            <!-- Total display in receipt style -->
+            <div class="mt-6 pt-4 border-t border-dashed border-slate-300">
+              <div class="flex justify-between text-xs text-slate-500 mb-1">
+                <span>初始總預算：</span>
+                <span>$1,000.00</span>
+              </div>
+              <div class="flex justify-between text-xs text-slate-500 mb-2">
+                <span>總支出金額：</span>
+                <span id="receipt-total-spent" class="font-semibold text-slate-700">-$757.50</span>
+              </div>
+              <div class="flex justify-between items-center text-slate-800 border-t border-slate-200 pt-3">
+                <span class="font-bold">剩餘可用資金 (Balance)：</span>
+                <span id="receipt-balance" class="text-2xl font-black text-emerald-600">$242.50</span>
+              </div>
+            </div>
+          </div>
+          <!-- Mathematical Insight Feedback Column (Md: 7 cols) -->
+          <div class="md:col-span-7 space-y-6">
+           
+            <div class="bg-emerald-50 border border-emerald-100 p-5 rounded-2xl">
+              <h4 class="font-bold text-emerald-900 text-base mb-2 flex items-center gap-2">
+                <i class="fa-solid fa-graduation-cap"></i> 數學運算與決策反思
+              </h4>
+              <p id="tactical-analysis" class="text-xs text-emerald-800 leading-relaxed">
+                <!-- Filled dynamically by JavaScript based on choice quality -->
+              </p>
+            </div>
+            <!-- Deep Dive Pitfalls Explanations -->
+            <div class="space-y-4">
+              <h4 class="font-bold text-slate-800 text-sm">🔍 課堂關鍵陷阱解密</h4>
+             
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+               
+                <!-- Pitfall 1 -->
+                <div class="border border-slate-100 bg-slate-50/50 p-4 rounded-xl text-xs space-y-1.5">
+                  <div class="font-bold text-rose-700 flex items-center gap-1.5">
+                    <i class="fa-solid fa-eye"></i> 陷阱一：Shop Y 眼球陷阱
+                  </div>
+                  <p class="text-slate-600 leading-relaxed">
+                    看見 Shop Y 擁有最便宜的電子平板單價 ($550，低於 Shop X 的 $600 與 Shop Z 的 $620) 便直覺下單？
+                  </p>
+                  <p class="text-slate-500 font-light border-t border-slate-200/60 pt-1.5">
+                    <strong>事實：</strong>如果你在 Shop Y 同時購買平板與耳機，因其只將較便宜的耳機打 6 折，使得總花費達 <strong>$700</strong>。然而，若將它們放在 Shop Z，因總額達 $840 觸發 25% 折扣，折後僅需 <strong>$630</strong>！
+                  </p>
+                </div>
+                <!-- Pitfall 2 -->
+                <div class="border border-slate-100 bg-slate-50/50 p-4 rounded-xl text-xs space-y-1.5">
+                  <div class="font-bold text-rose-700 flex items-center gap-1.5">
+                    <i class="fa-solid fa-tags"></i> 陷阱二：Shop Y 配對規則誤讀
+                  </div>
+                  <p class="text-slate-600 leading-relaxed">
+                    誤以為 40% Off (6折) 優惠適用於店內購買的所有商品，或直接乘以整單總額？
+                  </p>
+                  <p class="text-slate-500 font-light border-t border-slate-200/60 pt-1.5">
+                    <strong>零售數學常識：</strong>「買一送一/第二件折扣」一般要求兩兩配對，且折扣<strong class="underline">只套用在較便宜的一件</strong>。第 3 件沒成對的商品，除非加購第 4 件配對，否則必須全以原價計算。
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Call to action/Restart -->
+        <div class="bg-slate-50 px-6 py-4 flex flex-col sm:flex-row justify-between items-center border-t border-slate-100 gap-4">
+          <div class="text-xs text-slate-500 text-center sm:text-left">
+            💡 你可以重新開啟新的挑戰，更換另一組名提交，進行全班實時成績競逐！
+          </div>
+          <button onclick="resetGame()" class="bg-slate-800 hover:bg-slate-900 text-white font-bold py-2 px-5 rounded-lg text-sm transition duration-150 transform active:scale-95 flex items-center gap-1.5">
+            <i class="fa-solid fa-arrow-rotate-left"></i> 開啟新一輪挑戰
+          </button>
+        </div>
+      </div>
+      <!-- Real-time Class Leaderboard Section (Session based) -->
+      <div class="bg-white rounded-3xl shadow-lg p-6 border border-slate-100">
+        <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+          <i class="fa-solid fa-ranking-star text-amber-500"></i>
+          <span>班級即時積分榜 (Class Leaderboard)</span>
+        </h3>
+       
+        <div class="overflow-hidden rounded-xl border border-slate-100">
+          <table class="w-full text-left">
+            <thead>
+              <tr class="bg-slate-50 border-b border-slate-100 text-xs text-slate-500 font-semibold uppercase">
+                <th class="py-3 px-4 text-center w-16">排名</th>
+                <th class="py-3 px-4">小組名稱</th>
+                <th class="py-3 px-4 text-right">總花費</th>
+                <th class="py-3 px-4 text-right">剩餘餘額 (Balance)</th>
+                <th class="py-3 px-4 text-center">達成方案</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboard-body" class="divide-y divide-slate-100 text-sm">
+              <!-- Dynamically populated or fallback placeholder -->
+              <tr id="empty-leaderboard-row">
+                <td colspan="5" class="py-8 text-center text-slate-400 text-xs">
+                  目前尚未有小組提交數據。提交後即可查看班級排名！
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+  <!-- Confirm Submit Drawer/Modal Backdrop -->
+  <div id="confirm-modal" class="hidden fixed inset-0 bg-slate-900 bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl overflow-hidden transform transition-all duration-300 scale-95 border border-slate-100">
+      <div class="p-6 text-center space-y-4">
+        <div class="inline-flex p-3 bg-rose-50 text-rose-600 rounded-full text-3xl">
+          <i class="fa-solid fa-lock-open"></i>
+        </div>
+        <h3 class="text-xl font-bold text-slate-800">確定最終決策並結帳？</h3>
+        <p class="text-sm text-slate-500 leading-relaxed">
+          請再三與組員核對！一旦按下確定，你們便會提交此購買決策（無退回按鈕）。系統將即時扣除小組的 $1,000 預算，並計算剩餘款項。
+        </p>
+      </div>
+      <div class="bg-slate-50 p-4 flex gap-3 border-t border-slate-100">
+        <button onclick="closeModal()" class="flex-1 bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 font-bold py-2.5 px-4 rounded-xl text-sm transition duration-150">
+          返回核對
+        </button>
+        <button onclick="submitCheckout()" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 px-4 rounded-xl text-sm shadow-md hover:shadow-lg transition duration-150">
+          確定並鎖定結帳
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- Footer Section -->
+  <footer class="bg-slate-100 text-slate-500 py-6 border-t border-slate-200/80 mt-12">
+    <div class="max-w-6xl mx-auto px-4 text-center space-y-2">
+      <p class="text-xs">
+        © 2026 Queen Elizabeth School Mathematics Department. All Rights Reserved.
+      </p>
+      <p class="text-[10px] text-slate-400">
+        本學習程式專為 QE 中學 Secondary 2 學生協作與百分比應用實踐開發。部分平面插畫規則取材自 02-07-2026 教學實習大綱。
+      </p>
+    </div>
+  </footer>
+  <script>
+    // Game state variables
+    let currentTeamName = "";
+    const originalBudget = 1000.00;
+   
+    // Product data structure
+    const basePrices = {
+      tablet: { X: 600, Y: 550, Z: 620, name: "電子平板" },
+      headset: { X: 200, Y: 250, Z: 220, name: "無線耳機" },
+      wristband: { X: 150, Y: 120, Z: 140, name: "智能手環" }
+    };
+    // User's temporary choices
+    let selections = {
+      tablet: null,
+      headset: null,
+      wristband: null
+    };
+    // Simulated local database of leaderboard entries to support dynamic in-class competition
+    let leaderboard = [];
+    // On Load Check
+    window.onload = function() {
+      // Load scoreboard from localStorage if available
+      const savedScores = localStorage.getItem('qes_consumer_game_leaderboard');
+      if (savedScores) {
+        leaderboard = JSON.parse(savedScores);
+        updateLeaderboardView();
+      }
+    };
+    // Game initiation
+    function startGame() {
+      const input = document.getElementById("team-name-input").value.trim();
+      if (!input) {
+        alertMessage("請輸入你的組別或學生名稱以開始遊戲！");
+        return;
+      }
+      currentTeamName = input;
+     
+      // Update team visual badges
+      document.getElementById("team-badge").innerHTML = `<i class="fa-solid fa-users text-amber-400"></i> ${currentTeamName}`;
+      document.getElementById("receipt-team-name").innerText = currentTeamName;
+      // Swap views
+      document.getElementById("setup-section").classList.add("hidden");
+      document.getElementById("game-section").classList.remove("hidden");
+    }
+    // Handles option state rendering
+    function updateDecision(itemKey) {
+      const selectElement = document.getElementById(`select-${itemKey}`);
+      const value = selectElement.value;
+      selections[itemKey] = value || null;
+      const statusBadge = document.getElementById(`${itemKey}-status`);
+      const priceIndicator = document.getElementById(`${itemKey}-price-indicator`);
+      if (selections[itemKey]) {
+        statusBadge.innerHTML = `🟢 準備就緒`;
+        statusBadge.className = "text-xs px-2.5 py-0.5 rounded-full font-semibold bg-emerald-50 text-emerald-600 animate-pulse";
+        const price = basePrices[itemKey][value];
+        priceIndicator.innerHTML = `於 <strong>Shop ${value}</strong> 採購（原價 $${price}）`;
+      } else {
+        statusBadge.innerHTML = `🔴 未選擇`;
+        statusBadge.className = "text-xs px-2.5 py-0.5 rounded-full font-semibold bg-rose-50 text-rose-600";
+        priceIndicator.innerText = "未選商店";
+      }
+      // Check if all decisions are completed to enable checkout
+      checkCompletion();
+    }
+    // Verifies whether game can be submitted
+    function checkCompletion() {
+      const allSelected = selections.tablet && selections.headset && selections.wristband;
+      const btn = document.getElementById("checkout-btn");
+      if (allSelected) {
+        btn.disabled = false;
+        btn.className = "w-full bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition duration-150 transform active:scale-95 flex items-center justify-center gap-2 cursor-pointer";
+        btn.innerHTML = `<i class="fa-solid fa-wallet text-lg"></i> 鎖定決策，最終結算！`;
+      } else {
+        btn.disabled = true;
+        btn.className = "w-full bg-slate-300 text-slate-500 font-bold py-4 px-6 rounded-xl cursor-not-allowed transition duration-200 flex items-center justify-center gap-2";
+        btn.innerHTML = `<i class="fa-solid fa-lock"></i> 請先分配所有商品`;
+      }
+    }
+    // Custom non-alert error messenger
+    function alertMessage(msg) {
+      // Created on the fly to avoid alert blocks in iframe
+      const toast = document.createElement("div");
+      toast.className = "fixed bottom-5 right-5 bg-rose-600 text-white py-3 px-6 rounded-xl shadow-2xl font-bold flex items-center gap-3 z-50 animate-bounce";
+      toast.innerHTML = `<i class="fa-solid fa-circle-exclamation text-lg"></i> <span>${msg}</span>`;
+      document.body.appendChild(toast);
+      setTimeout(() => {
+        toast.remove();
+      }, 3500);
+    }
+    // Modal Operations
+    function confirmCheckout() {
+      document.getElementById("confirm-modal").classList.remove("hidden");
+    }
+    function closeModal() {
+      document.getElementById("confirm-modal").classList.add("hidden");
+    }
+    // Primary Math Calculator Engine
+    function calculateTotalCost(choices) {
+      let spentX = 0;
+      let spentY = 0;
+      let spentZ = 0;
+      // Group products dynamically by selected store
+      const itemsInX = [];
+      const itemsInY = [];
+      const itemsInZ = [];
+      if (choices.tablet === 'X') itemsInX.push({ name: '電子平板', price: basePrices.tablet.X });
+      if (choices.headset === 'X') itemsInX.push({ name: '無線耳機', price: basePrices.headset.X });
+      if (choices.wristband === 'X') itemsInX.push({ name: '智能手環', price: basePrices.wristband.X });
+      if (choices.tablet === 'Y') itemsInY.push({ name: '電子平板', price: basePrices.tablet.Y });
+      if (choices.headset === 'Y') itemsInY.push({ name: '無線耳機', price: basePrices.headset.Y });
+      if (choices.wristband === 'Y') itemsInY.push({ name: '智能手環', price: basePrices.wristband.Y });
+      if (choices.tablet === 'Z') itemsInZ.push({ name: '電子平板', price: basePrices.tablet.Z });
+      if (choices.headset === 'Z') itemsInZ.push({ name: '無線耳機', price: basePrices.headset.Z });
+      if (choices.wristband === 'Z') itemsInZ.push({ name: '智能手環', price: basePrices.wristband.Z });
+      // Calculate Shop X Cost (15% Off everything)
+      let rawTotalX = itemsInX.reduce((sum, item) => sum + item.price, 0);
+      spentX = rawTotalX * 0.85;
+      // Calculate Shop Y Cost (Buy 1 Get cheapest 2nd at 40% off)
+      // Pairing strategy for Shop Y:
+      if (itemsInY.length === 1) {
+        spentY = itemsInY[0].price;
+      } else if (itemsInY.length === 2) {
+        const sortedY = [...itemsInY].sort((a, b) => b.price - a.price); // Descending order
+        // The cheaper item gets 40% off (calculated at 0.60)
+        spentY = sortedY[0].price + (sortedY[1].price * 0.60);
+      } else if (itemsInY.length === 3) {
+        // According to Slide 11's rule check: Tablet ($550) + Headset ($250 * 0.60) + Wristband ($120) = $820
+        // It pairs Tablet & Headset, Headset is cheaper (gets discount), Wristband is full price
+        // General formula: Sort descending: [550, 250, 120].
+        // We pair the first two (the two most expensive): {550, 250}. The cheaper of these is 250 (gets 40% off).
+        // Third is raw price: 120. Total: 550 + 150 + 120 = 820.
+        const sortedY = [...itemsInY].sort((a, b) => b.price - a.price);
+        spentY = sortedY[0].price + (sortedY[1].price * 0.60) + sortedY[2].price;
+      }
+      // Calculate Shop Z Cost (Progressive tier: 10% off > $500, 25% off > $800)
+      let rawTotalZ = itemsInZ.reduce((sum, item) => sum + item.price, 0);
+      if (rawTotalZ > 800) {
+        spentZ = rawTotalZ * 0.75;
+      } else if (rawTotalZ > 500) {
+        spentZ = rawTotalZ * 0.90;
+      } else {
+        spentZ = rawTotalZ;
+      }
+      return {
+        spentX: parseFloat(spentX.toFixed(2)),
+        spentY: parseFloat(spentY.toFixed(2)),
+        spentZ: parseFloat(spentZ.toFixed(2)),
+        rawTotalX,
+        rawTotalY: itemsInY.reduce((sum, item) => sum + item.price, 0),
+        rawTotalZ,
+        totalSpent: parseFloat((spentX + spentY + spentZ).toFixed(2))
+      };
+    }
+    // Handles submission, writes scores, generates reports and analysis
+    function submitCheckout() {
+      closeModal();
+      const calculations = calculateTotalCost(selections);
+      const spent = calculations.totalSpent;
+      const balance = parseFloat((originalBudget - spent).toFixed(2));
+      // Build Dynamic Receipt
+      const receiptContainer = document.getElementById("receipt-items");
+      receiptContainer.innerHTML = "";
+      const keys = ['tablet', 'headset', 'wristband'];
+      keys.forEach(key => {
+        const store = selections[key];
+        const basePrice = basePrices[key][store];
+        let discountDetails = "";
+        if (store === 'X') {
+          discountDetails = `<span class="text-xs bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded font-semibold ml-2">15% Off (85折)</span>`;
+        } else if (store === 'Y') {
+          discountDetails = `<span class="text-xs bg-purple-100 text-purple-800 px-1.5 py-0.5 rounded font-semibold ml-2">Shop Y 配對計</span>`;
+        } else if (store === 'Z') {
+          discountDetails = `<span class="text-xs bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded font-semibold ml-2">Shop Z 階梯計</span>`;
+        }
+        receiptContainer.innerHTML += `
+          <div class="flex justify-between items-start border-b border-slate-100 pb-2">
+            <div>
+              <div class="font-bold text-slate-800 text-sm">${basePrices[key].name} (${basePrices[key].name === '電子平板' ? '📱' : basePrices[key].name === '無線耳機' ? '🎧' : '⌚'})</div>
+              <div class="text-xs text-slate-400 mt-0.5">購入商店：Shop ${store} | 原價: $${basePrice} ${discountDetails}</div>
+            </div>
+          </div>
+        `;
+      });
+      // Display calculations at receipt footer
+      let receiptTDetails = `
+        <div class="space-y-1 mt-3 bg-slate-100/50 p-3 rounded-lg text-xs font-mono text-slate-600">
+          <div class="font-semibold text-slate-800 mb-1">📐 計算步驟明細：</div>
+      `;
+      if (calculations.rawTotalX > 0) {
+        receiptTDetails += `<div>• Shop X 花費: $${calculations.rawTotalX} × 0.85 = $${calculations.spentX}</div>`;
+      }
+      if (calculations.rawTotalY > 0) {
+        receiptTDetails += `<div>• Shop Y 最終結算花費 = $${calculations.spentY}</div>`;
+      }
+      if (calculations.rawTotalZ > 0) {
+        const discountText = calculations.rawTotalZ > 800 ? "0.75 (25% Off)" : (calculations.rawTotalZ > 500 ? "0.90 (10% Off)" : "原價無折");
+        receiptTDetails += `<div>• Shop Z 花費: $${calculations.rawTotalZ} × ${discountText} = $${calculations.spentZ}</div>`;
+      }
+      receiptTDetails += `</div>`;
+      receiptContainer.innerHTML += receiptTDetails;
+      document.getElementById("receipt-total-spent").innerText = `-$${spent.toFixed(2)}`;
+      document.getElementById("receipt-balance").innerText = `$${balance.toFixed(2)}`;
+      // Calculate category performance & give strategic feedback (Teacher Insight)
+      let tacticalMsg = "";
+      let performanceTheme = "";
+      let strategyName = "";
+      // Logic check for the standard Optimal Target ($242.50) vs Secret Loophole Target ($265.00)
+      const isClassicOptimal = (selections.tablet === 'Z' && selections.headset === 'Z' && selections.wristband === 'X');
+      const isSuperOptimal = (selections.tablet === 'Z' && selections.headset === 'Z' && selections.wristband === 'Z');
+      if (isSuperOptimal) {
+        performanceTheme = "bg-gradient-to-r from-amber-600 via-yellow-500 to-amber-600";
+        strategyName = "🌟 突破思維！【全店策略 Z】方案";
+        tacticalMsg = `
+          <strong>太厲害了！你們獲得了真正的數學最大值！</strong><br><br>
+          你們在 Shop Z 同時購買這三件商品（總額 $620 + $220 + $140 = $980），成功觸發了 <strong>超過 $800 減免 25%</strong> 政策（75折）！<br>
+          算式：$980 × 0.75 = $735.00。<br>
+          剩餘餘額高達 <strong>$265.00</strong>，這甚至比課本的傳統拆單標準答案還多省下 $22.50！你們完美展現了「Check (驗算)」與靈活跳脫的數學家思考！
+        `;
+        document.getElementById("result-icon-container").innerHTML = `<i class="fa-solid fa-crown text-amber-300 animate-pulse"></i>`;
+      } else if (isClassicOptimal) {
+        performanceTheme = "bg-gradient-to-r from-emerald-700 to-teal-700";
+        strategyName = "🎉 完美過關！【最優拆單策略】方案";
+        tacticalMsg = `
+          <strong>恭喜你們！完全達成了學校教材的完美拆單最優解！</strong><br><br>
+          你們透過策略性拆分，避開了眼球陷阱：<br>
+          1. <strong>Shop Z（平板+耳機）：</strong> 總額 $840（高於 $800）成功觸發 25% 優惠：$840 × 0.75 = $630.00。<br>
+          2. <strong>Shop X（智能手環）：</strong> 原價 $150 享有單獨 15% 優惠：$150 × 0.85 = $127.50。<br>
+          總花費完美控制在 $757.50，賸餘 <strong>$242.50</strong>！這就是最精明的拆分購買法則！
+        `;
+        document.getElementById("result-icon-container").innerHTML = `<i class="fa-solid fa-trophy text-yellow-300"></i>`;
+      } else {
+        performanceTheme = "bg-gradient-to-r from-slate-700 to-slate-800";
+        strategyName = "⚠️ 仍有改善空間！再加把勁！";
+       
+        let trapDetected = "";
+        if (selections.tablet === 'Y') {
+          trapDetected += `❌ <strong>你們落入了「Shop Y 的單件平板低價陷阱」！</strong>雖然 Shop Y 平板原價 $550 最便宜，但由於耳機也配在 Y，打 6 折僅適用於較平的耳機，平板仍是 $550 原價。這使你們錯過了將它們放到 Shop Z 合併觸發 25% Off 的黃金機會。<br><br>`;
+        }
+        if (selections.tablet === 'X' && selections.headset === 'X' && selections.wristband === 'X') {
+          trapDetected += `❌ <strong>你們採用了「懶人全買 X」策略。</strong>雖然每件都享有 15% 折扣，但這只是一般優惠。透過拆單分配給其他店舖，可以獲得更大的階梯扣除！<br><br>`;
+        }
+        tacticalMsg = `
+          你們的總花費為 $${spent.toFixed(2)}，剩餘餘額為 <strong>$${balance.toFixed(2)}</strong>。<br><br>
+          ${trapDetected}
+          <strong>💡 精明提示：</strong>試試把「電子平板」與「無線耳機」放在同一家高階梯折扣商店（例如 Shop Z 滿 $800 打 75 折），然後把最平的「智能手環」放在擁有高單件折扣的 X 店，相信你們一定能拿到超越 $240 餘額的佳績！
+        `;
+        document.getElementById("result-icon-container").innerHTML = `<i class="fa-solid fa-seedling text-emerald-300"></i>`;
+      }
+      // Render Visual Feedback
+      document.getElementById("result-header-banner").className = `p-8 text-center text-white relative ${performanceTheme}`;
+      document.getElementById("result-title").innerHTML = `賸餘餘額：$${balance.toFixed(2)}`;
+      document.getElementById("result-subtitle").innerText = strategyName;
+      document.getElementById("tactical-analysis").innerHTML = tacticalMsg;
+      // Add to Session Leaderboard
+      leaderboard.push({
+        teamName: currentTeamName,
+        spent: spent,
+        balance: balance,
+        strategy: isSuperOptimal ? "全Z策略 (超極優)" : (isClassicOptimal ? "課本最優拆單" : "普通採購組合")
+      });
+      // Sort leaderboard: Highest balance first
+      leaderboard.sort((a, b) => b.balance - a.balance);
+      // Save to localStorage
+      localStorage.setItem('qes_consumer_game_leaderboard', JSON.stringify(leaderboard));
+      // Update leaderboard display
+      updateLeaderboardView();
+      // Show Result Section, Hide Selection Panel
+      document.getElementById("game-section").classList.add("hidden");
+      document.getElementById("result-section").classList.remove("hidden");
+    }
+    // Leaderboard Renderer
+    function updateLeaderboardView() {
+      const tbody = document.getElementById("leaderboard-body");
+      if (leaderboard.length === 0) {
+        return;
+      }
+      tbody.innerHTML = "";
+      leaderboard.forEach((entry, index) => {
+        let medal = index + 1;
+        if (index === 0) medal = "🥇 冠軍";
+        else if (index === 1) medal = "🥈 亞軍";
+        else if (index === 2) medal = "🥉 季軍";
+        let trClass = "hover:bg-slate-50 transition duration-150";
+        if (entry.teamName === currentTeamName) {
+          trClass = "bg-emerald-50 hover:bg-emerald-100 font-semibold transition duration-150";
+        }
+        let strategyBadge = `<span class="bg-slate-100 text-slate-700 text-xs px-2.5 py-0.5 rounded-full font-medium">${entry.strategy}</span>`;
+        if (entry.strategy.includes("超極優")) {
+          strategyBadge = `<span class="bg-amber-100 text-amber-800 text-xs px-2.5 py-0.5 rounded-full font-bold">🌟 ${entry.strategy}</span>`;
+        } else if (entry.strategy.includes("最優")) {
+          strategyBadge = `<span class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-0.5 rounded-full font-bold">🎉 ${entry.strategy}</span>`;
+        }
+        tbody.innerHTML += `
+          <tr class="${trClass}">
+            <td class="py-3 px-4 text-center font-bold text-slate-700">${medal}</td>
+            <td class="py-3 px-4 text-slate-800">${entry.teamName} ${entry.teamName === currentTeamName ? '<span class="text-xs bg-emerald-600 text-white font-normal px-2 py-0.5 rounded ml-1">你的一組</span>' : ''}</td>
+            <td class="py-3 px-4 text-right font-mono text-slate-600">$${entry.spent.toFixed(2)}</td>
+            <td class="py-3 px-4 text-right font-mono text-emerald-600 font-bold">$${entry.balance.toFixed(2)}</td>
+            <td class="py-3 px-4 text-center">${strategyBadge}</td>
+          </tr>
+        `;
+      });
+    }
+    // Soft resets game state for another team
+    function resetGame() {
+      // Clear selections
+      selections = { tablet: null, headset: null, wristband: null };
+     
+      // Reset html components
+      document.getElementById("select-tablet").value = "";
+      document.getElementById("select-headset").value = "";
+      document.getElementById("select-wristband").value = "";
+     
+      updateDecision('tablet');
+      updateDecision('headset');
+      updateDecision('wristband');
+      document.getElementById("team-name-input").value = "";
+      document.getElementById("scratchpad").value = "";
+      // Swap view state
+      document.getElementById("result-section").classList.add("hidden");
+      document.getElementById("setup-section").classList.remove("hidden");
+    }
+  </script>
+</body>
+</html>
